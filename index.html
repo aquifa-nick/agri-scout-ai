@@ -22,9 +22,10 @@
         /* Modern button styles */
         .btn-primary {
             background: linear-gradient(135deg, #02423c 0%, #034741 100%);
-            @apply text-white font-semibold py-4 px-6 rounded-2xl text-lg shadow-xl transition-all duration-300 transform;
+            @apply text-white font-semibold py-4 px-6 text-lg shadow-xl transition-all duration-300 transform;
             min-height: 60px;
             border: none;
+            border-radius: 10px;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
@@ -36,8 +37,9 @@
         
         .btn-secondary {
             background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300;
+            @apply text-white font-semibold py-3 px-5 text-base shadow-lg transition-all duration-300;
             min-height: 50px;
+            border-radius: 10px;
         }
         .btn-secondary:hover {
             background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
@@ -46,8 +48,9 @@
         
         .btn-danger {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300;
+            @apply text-white font-semibold py-3 px-5 text-base shadow-lg transition-all duration-300;
             min-height: 50px;
+            border-radius: 10px;
         }
         .btn-danger:hover {
             transform: translateY(-1px);
@@ -56,8 +59,9 @@
         
         .btn-success {
             background: linear-gradient(135deg, #02423c 0%, #059669 100%);
-            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300;
+            @apply text-white font-semibold py-3 px-5 text-base shadow-lg transition-all duration-300;
             min-height: 50px;
+            border-radius: 10px;
         }
         .btn-success:hover {
             transform: translateY(-1px);
@@ -81,24 +85,30 @@
         /* Modern input styles */
         .input-field {
             background: rgba(255, 255, 255, 0.9);
-            @apply w-full p-4 text-lg border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300;
+            @apply w-full p-4 text-lg border-0 transition-all duration-300;
             min-height: 60px;
             backdrop-filter: blur(10px);
+            border-radius: 10px;
+            outline: none;
         }
         .input-field:focus {
             background: rgba(255, 255, 255, 1);
             transform: scale(1.02);
+            box-shadow: 0 0 0 2px #02423c;
         }
         
         .select-field {
             background: rgba(255, 255, 255, 0.9);
-            @apply w-full p-4 text-lg border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300;
+            @apply w-full p-4 text-lg border-0 transition-all duration-300;
             min-height: 60px;
             backdrop-filter: blur(10px);
+            border-radius: 10px;
+            outline: none;
         }
         .select-field:focus {
             background: rgba(255, 255, 255, 1);
             transform: scale(1.02);
+            box-shadow: 0 0 0 2px #02423c;
         }
         
         /* Header with gradient */
@@ -203,7 +213,9 @@
         
         /* Recommendation lists */
         .recommendation-list {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             @apply rounded-xl p-4 mb-4;
         }
         .recommendation-item {
@@ -951,13 +963,13 @@
                             <div class="w-6 h-6 rounded-full" style="background: linear-gradient(135deg, #02423c 0%, #059669 100%);" class="flex items-center justify-center mr-2">
                                 <span class="text-white text-xs">🌱</span>
                             </div>
-                            <h3 class="font-semibold text-white">Non-Chemical Management</h3>
+                            <h3 class="font-semibold text-gray-800">Non-Chemical Management</h3>
                         </div>
                         <div class="space-y-3">
                             ${result.recommendations.nonChemical.map((rec, index) => `
                                 <div class="recommendation-item">
                                     <div class="recommendation-icon non-chemical">${index + 1}</div>
-                                    <span class="text-white/90">${rec}</span>
+                                    <span class="text-gray-700">${rec}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -968,13 +980,13 @@
                             <div class="w-6 h-6 rounded-full bg-gradient-to-r from-gray-600 to-gray-500 flex items-center justify-center mr-2">
                                 <span class="text-white text-xs">🧪</span>
                             </div>
-                            <h3 class="font-semibold text-white">Chemical Management</h3>
+                            <h3 class="font-semibold text-gray-800">Chemical Management</h3>
                         </div>
                         <div class="space-y-3">
                             ${result.recommendations.chemical.map((rec, index) => `
                                 <div class="recommendation-item">
                                     <div class="recommendation-icon chemical">${index + 1}</div>
-                                    <span class="text-white/90">${rec}</span>
+                                    <span class="text-gray-700">${rec}</span>
                                 </div>
                             `).join('')}
                         </div>
