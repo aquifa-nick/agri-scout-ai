@@ -8,40 +8,130 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        /* Custom styles for high contrast and mobile optimization */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Modern button styles */
         .btn-primary {
-            @apply bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg text-lg shadow-lg transition-colors duration-200;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            @apply text-white font-semibold py-4 px-6 rounded-2xl text-lg shadow-xl transition-all duration-300 transform;
             min-height: 60px;
+            border: none;
         }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+        
         .btn-secondary {
-            @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-lg text-base shadow-lg transition-colors duration-200;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300 border border-white/20;
             min-height: 50px;
         }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
         .btn-danger {
-            @apply bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-5 rounded-lg text-base shadow-lg transition-colors duration-200;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300;
             min-height: 50px;
         }
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            @apply text-white font-semibold py-3 px-5 rounded-xl text-base shadow-lg transition-all duration-300;
+            min-height: 50px;
+        }
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(86, 171, 47, 0.4);
+        }
+        
+        /* Modern card styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Modern input styles */
         .input-field {
-            @apply w-full p-4 text-lg border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none;
+            background: rgba(255, 255, 255, 0.9);
+            @apply w-full p-4 text-lg border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300;
             min-height: 60px;
+            backdrop-filter: blur(10px);
         }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.02);
+        }
+        
         .select-field {
-            @apply w-full p-4 text-lg border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none bg-white;
+            background: rgba(255, 255, 255, 0.9);
+            @apply w-full p-4 text-lg border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300;
             min-height: 60px;
+            backdrop-filter: blur(10px);
         }
+        .select-field:focus {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.02);
+        }
+        
+        /* Header with gradient */
+        .header-gradient {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            backdrop-filter: blur(20px);
+        }
+        
+        /* Camera guide */
         .camera-guide {
-            border: 3px solid #10b981;
-            border-radius: 12px;
-            background: rgba(16, 185, 129, 0.1);
+            border: 3px solid #667eea;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transition: all 0.3s ease;
         }
+        .camera-guide:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Map styling */
         #map {
             height: 400px;
             width: 100%;
-            border-radius: 12px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
+        
+        /* Loading animation */
         .loading-spinner {
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #10b981;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #667eea;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -52,20 +142,109 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Results card */
         .result-card {
-            @apply bg-white rounded-lg shadow-lg p-6 mb-4 border-l-4 border-green-500;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            @apply rounded-3xl shadow-xl p-6 mb-4 border-l-4;
+            border-left-color: #667eea;
+            transition: all 0.3s ease;
         }
-        .confidence-high { @apply text-green-600 font-bold; }
-        .confidence-medium { @apply text-yellow-600 font-bold; }
-        .confidence-low { @apply text-red-600 font-bold; }
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Confidence indicators */
+        .confidence-high { 
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            @apply font-bold text-white px-3 py-1 rounded-full text-sm; 
+        }
+        .confidence-medium { 
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            @apply font-bold text-white px-3 py-1 rounded-full text-sm; 
+        }
+        .confidence-low { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            @apply font-bold text-white px-3 py-1 rounded-full text-sm; 
+        }
+        
+        /* Info cards */
+        .info-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            @apply rounded-xl p-4 mb-4 text-white;
+        }
+        
+        /* Screen transitions */
+        .screen {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        
+        /* Modal styling */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Photo preview styling */
+        .photo-preview-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            @apply rounded-2xl p-4;
+        }
+        
+        /* Recommendation lists */
+        .recommendation-list {
+            background: rgba(255, 255, 255, 0.05);
+            @apply rounded-xl p-4 mb-4;
+        }
+        .recommendation-item {
+            @apply flex items-start mb-3 last:mb-0;
+        }
+        .recommendation-icon {
+            @apply w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-0.5;
+        }
+        .recommendation-icon.non-chemical {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+        .recommendation-icon.chemical {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="min-h-screen">
     <!-- Header -->
-    <header class="bg-green-700 text-white p-4 shadow-lg">
-        <div class="max-w-md mx-auto">
-            <h1 class="text-2xl font-bold text-center">🌾 Agri-Scout AI</h1>
-            <p class="text-center text-green-100 mt-1">Field Identification Tool</p>
+    <header class="header-gradient text-white p-6 shadow-2xl">
+        <div class="max-w-md mx-auto text-center">
+            <div class="mb-2">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-10 mb-3">
+                    <span class="text-3xl">🌾</span>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold mb-1 tracking-tight">Agri-Scout AI</h1>
+            <p class="text-white/80 font-medium">Field Identification Tool</p>
         </div>
     </header>
 
@@ -74,38 +253,56 @@
         
         <!-- Step 1: Field Selection/Mapping -->
         <div id="field-selection-screen" class="screen">
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-4">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">📍 Select Your Field</h2>
+            <div class="glass-card p-6 mb-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 mb-3">
+                        <span class="text-xl">📍</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Select Your Field</h2>
+                    <p class="text-gray-600">Choose an existing field or create a new one</p>
+                </div>
                 
                 <!-- Existing Fields -->
-                <div id="existing-fields" class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Saved Fields:</label>
+                <div id="existing-fields" class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">Saved Fields</label>
                     <select id="field-selector" class="select-field">
-                        <option value="">Select a field...</option>
+                        <option value="">Choose a field...</option>
                     </select>
                 </div>
                 
                 <!-- Or Create New Field -->
-                <div class="text-center mb-4">
-                    <p class="text-gray-600 mb-2">or</p>
+                <div class="text-center mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="flex-1 h-px bg-gradient-to-r from-transparent to-gray-300"></div>
+                        <span class="px-4 text-gray-500 font-medium">or</span>
+                        <div class="flex-1 h-px bg-gradient-to-l from-transparent to-gray-300"></div>
+                    </div>
                     <button id="create-field-btn" class="btn-secondary w-full">
-                        🗺️ Create New Field
+                        <span class="mr-2">🗺️</span>
+                        Create New Field
                     </button>
                 </div>
                 
                 <!-- Continue Button -->
                 <button id="continue-to-camera-btn" class="btn-primary w-full" disabled>
-                    📸 Start Identification
+                    <span class="mr-2">📸</span>
+                    Start Identification
                 </button>
             </div>
         </div>
 
         <!-- Field Creation Modal -->
-        <div id="field-creation-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div id="field-creation-modal" class="fixed inset-0 modal-backdrop z-50 hidden">
             <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="bg-white rounded-lg shadow-xl max-w-sm w-full">
+                <div class="glass-card max-w-sm w-full">
                     <div class="p-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Create New Field</h3>
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 mb-3">
+                                <span class="text-xl">🗺️</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Create New Field</h3>
+                            <p class="text-gray-600 text-sm">Draw your field boundary on the map</p>
+                        </div>
                         
                         <!-- Map Container -->
                         <div id="map" class="mb-4"></div>
@@ -123,14 +320,19 @@
                         </select>
                         
                         <!-- Instructions -->
-                        <p class="text-sm text-gray-600 mb-4">
-                            📍 Tap points on the map to outline your field boundary. Tap the first point again to complete the shape.
-                        </p>
+                        <div class="info-card mb-4">
+                            <div class="flex items-start">
+                                <span class="text-lg mr-2">📍</span>
+                                <p class="text-sm text-white/90">
+                                    Tap points on the map to outline your field boundary. Tap the first point again to complete the shape.
+                                </p>
+                            </div>
+                        </div>
                         
                         <!-- Buttons -->
-                        <div class="flex space-x-2">
+                        <div class="flex space-x-3">
                             <button id="cancel-field-btn" class="btn-danger flex-1">Cancel</button>
-                            <button id="save-field-btn" class="btn-primary flex-1" disabled>Save Field</button>
+                            <button id="save-field-btn" class="btn-success flex-1" disabled>Save Field</button>
                         </div>
                     </div>
                 </div>
@@ -139,59 +341,94 @@
 
         <!-- Step 2: Camera Capture -->
         <div id="camera-screen" class="screen hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-4">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">📸 Capture Image</h2>
+            <div class="glass-card p-6 mb-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mb-3">
+                        <span class="text-xl">📸</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Capture Image</h2>
+                    <p class="text-gray-600">Take a photo of the issue you want to identify</p>
+                </div>
                 
                 <!-- Current Field Info -->
-                <div class="bg-green-50 p-3 rounded-lg mb-4">
-                    <p class="text-sm text-gray-600">Current Field:</p>
-                    <p class="font-semibold text-green-700" id="current-field-name">-</p>
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl mb-6 border border-green-100">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Current Field</p>
+                            <p class="font-semibold text-green-700" id="current-field-name">-</p>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Camera Instructions -->
-                <div class="bg-blue-50 p-4 rounded-lg mb-4">
-                    <h3 class="font-semibold text-blue-800 mb-2">📋 Photo Tips:</h3>
-                    <ul class="text-sm text-blue-700 space-y-1">
-                        <li>• Get a clear, close-up shot</li>
-                        <li>• Ensure good lighting</li>
-                        <li>• Fill the frame with the subject</li>
-                        <li>• Avoid shadows and blur</li>
-                    </ul>
+                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-xl mb-6 border border-blue-100">
+                    <div class="flex items-start">
+                        <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 mr-3 mt-0.5">
+                            <span class="text-white text-sm">📋</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-blue-800 mb-2">Photo Tips</h3>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li class="flex items-center"><span class="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>Get a clear, close-up shot</li>
+                                <li class="flex items-center"><span class="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>Ensure good lighting</li>
+                                <li class="flex items-center"><span class="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>Fill the frame with the subject</li>
+                                <li class="flex items-center"><span class="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>Avoid shadows and blur</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Camera Input -->
                 <input type="file" id="camera-input" accept="image/*" capture="environment" class="hidden">
-                <button id="take-photo-btn" class="btn-primary w-full mb-4">
-                    📷 Take Photo
+                <button id="take-photo-btn" class="btn-primary w-full mb-6">
+                    <span class="mr-2">📷</span>
+                    Take Photo
                 </button>
                 
                 <!-- Photo Preview -->
-                <div id="photo-preview" class="hidden mb-4">
-                    <img id="preview-image" class="w-full rounded-lg shadow-lg camera-guide">
-                    <div class="flex space-x-2 mt-3">
-                        <button id="retake-photo-btn" class="btn-danger flex-1">🔄 Retake</button>
-                        <button id="use-photo-btn" class="btn-primary flex-1">✅ Use Photo</button>
+                <div id="photo-preview" class="hidden mb-6">
+                    <div class="photo-preview-container mb-4">
+                        <img id="preview-image" class="w-full rounded-xl shadow-lg camera-guide">
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="retake-photo-btn" class="btn-danger flex-1">
+                            <span class="mr-2">🔄</span>Retake
+                        </button>
+                        <button id="use-photo-btn" class="btn-success flex-1">
+                            <span class="mr-2">✅</span>Use Photo
+                        </button>
                     </div>
                 </div>
                 
                 <!-- Back Button -->
-                <button id="back-to-fields-btn" class="btn-secondary w-full">← Back to Fields</button>
+                <button id="back-to-fields-btn" class="btn-secondary w-full">
+                    <span class="mr-2">←</span>Back to Fields
+                </button>
             </div>
         </div>
 
         <!-- Step 3: Context Input -->
         <div id="context-screen" class="screen hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-4">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">📝 Add Context</h2>
+            <div class="glass-card p-6 mb-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-red-500 mb-3">
+                        <span class="text-xl">📝</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Add Context</h2>
+                    <p class="text-gray-600">Help our AI with additional field information</p>
+                </div>
                 
                 <!-- Photo Thumbnail -->
-                <div class="mb-4">
-                    <img id="context-photo-thumb" class="w-20 h-20 object-cover rounded-lg shadow-md mx-auto">
+                <div class="flex justify-center mb-6">
+                    <div class="photo-preview-container">
+                        <img id="context-photo-thumb" class="w-20 h-20 object-cover rounded-xl shadow-lg">
+                    </div>
                 </div>
                 
                 <!-- Crop Type -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Crop Type:</label>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">Crop Type</label>
                     <select id="context-crop-type" class="select-field">
                         <option value="corn">🌽 Corn</option>
                         <option value="soybeans">🫘 Soybeans</option>
@@ -201,8 +438,8 @@
                 </div>
                 
                 <!-- Growth Stage -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Growth Stage:</label>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">Growth Stage</label>
                     <select id="growth-stage" class="select-field">
                         <option value="">Select growth stage...</option>
                         <option value="emergence">🌱 Emergence (VE-VC)</option>
@@ -217,26 +454,39 @@
                 
                 <!-- Recent Applications -->
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Recent Applications (Optional):</label>
+                    <label class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">Recent Applications <span class="text-gray-400 normal-case">(Optional)</span></label>
                     <textarea id="recent-applications" placeholder="e.g., Sprayed Roundup two weeks ago..." class="input-field h-24 resize-none"></textarea>
                 </div>
                 
                 <!-- Submit Button -->
                 <button id="submit-analysis-btn" class="btn-primary w-full mb-4">
-                    🔍 Submit for Analysis
+                    <span class="mr-2">🔍</span>
+                    Submit for Analysis
                 </button>
                 
                 <!-- Back Button -->
-                <button id="back-to-camera-btn" class="btn-secondary w-full">← Back to Photo</button>
+                <button id="back-to-camera-btn" class="btn-secondary w-full">
+                    <span class="mr-2">←</span>Back to Photo
+                </button>
             </div>
         </div>
 
         <!-- Step 4: Analysis Loading -->
         <div id="loading-screen" class="screen hidden">
-            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-                <div class="loading-spinner mb-4"></div>
-                <h2 class="text-xl font-bold text-gray-800 mb-2">🔍 Analyzing...</h2>
-                <p class="text-gray-600">Our AI is examining your image and context to provide an identification.</p>
+            <div class="glass-card p-8 text-center">
+                <div class="mb-6">
+                    <div class="loading-spinner mb-4"></div>
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 mb-4">
+                        <span class="text-2xl">🤖</span>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-3">Analyzing Your Image</h2>
+                <p class="text-gray-600 mb-4">Our AI is examining your photo and context to provide an accurate identification.</p>
+                <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                    <span>Processing with Gemini AI</span>
+                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                </div>
             </div>
         </div>
 
@@ -249,27 +499,48 @@
             <!-- Action Buttons -->
             <div class="mt-6 space-y-3">
                 <button id="new-identification-btn" class="btn-primary w-full">
-                    🔄 New Identification
+                    <span class="mr-2">🔄</span>
+                    New Identification
                 </button>
                 <button id="back-to-context-btn" class="btn-secondary w-full">
-                    ← Back to Context
+                    <span class="mr-2">←</span>
+                    Back to Context
                 </button>
             </div>
         </div>
 
         <!-- Error Screen -->
         <div id="error-screen" class="screen hidden">
-            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
-                <h2 class="text-xl font-bold text-red-800 mb-4">⚠️ Error</h2>
-                <p id="error-message" class="text-red-700 mb-4"></p>
-                <button id="retry-btn" class="btn-primary w-full">Try Again</button>
+            <div class="glass-card p-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-red-500 to-pink-500 mb-4">
+                        <span class="text-2xl">⚠️</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Something Went Wrong</h2>
+                    <p class="text-gray-600 mb-4">We encountered an issue while processing your request</p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-xl border border-red-100 mb-6">
+                    <p id="error-message" class="text-red-700 text-center"></p>
+                </div>
+                
+                <button id="retry-btn" class="btn-primary w-full">
+                    <span class="mr-2">🔄</span>
+                    Try Again
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="text-center text-gray-500 text-sm p-4 mt-8">
-        <p>© 2024 Agri-Scout AI - Empowering farmers with AI-driven field insights</p>
+    <footer class="text-center text-white/60 text-sm p-8 mt-8">
+        <div class="max-w-md mx-auto">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-10 mb-3">
+                <span class="text-lg">🌾</span>
+            </div>
+            <p class="font-medium">© 2024 Agri-Scout AI</p>
+            <p class="text-white/40 text-xs mt-1">Empowering farmers with AI-driven field insights</p>
+        </div>
     </footer>
 
     <script>
@@ -637,57 +908,98 @@
             
             container.innerHTML = `
                 <div class="result-card">
-                    <div class="flex items-center mb-4">
-                        <img src="${capturedPhoto}" class="w-20 h-20 object-cover rounded-lg shadow-md mr-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-800">${result.identification.commonName}</h2>
-                            <p class="text-gray-600 italic">${result.identification.scientificName}</p>
-                            <p class="${confidenceClass}">${result.identification.confidence}% Confidence</p>
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 mb-3">
+                            <span class="text-xl">🔍</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Analysis Complete</h2>
+                        <p class="text-gray-600">Here's what we found in your field</p>
+                    </div>
+                    
+                    <div class="flex items-center mb-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl">
+                        <img src="${capturedPhoto}" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-4">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">${result.identification.commonName}</h3>
+                            <p class="text-gray-600 italic text-sm mb-2">${result.identification.scientificName}</p>
+                            <span class="${confidenceClass}">${result.identification.confidence}% Confidence</span>
                         </div>
                     </div>
                     
                     <div class="mb-6">
-                        <h3 class="font-semibold text-gray-800 mb-2">🔍 Description:</h3>
-                        <p class="text-gray-700 leading-relaxed">${result.description}</p>
+                        <div class="flex items-center mb-3">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mr-2">
+                                <span class="text-white text-xs">ℹ️</span>
+                            </div>
+                            <h3 class="font-semibold text-gray-800">Description</h3>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-xl border border-blue-100">${result.description}</p>
                     </div>
                     
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-gray-800 mb-3">🌱 Non-Chemical Management:</h3>
-                        <ul class="space-y-2">
-                            ${result.recommendations.nonChemical.map(rec => `
-                                <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">•</span>
-                                    <span class="text-gray-700">${rec}</span>
-                                </li>
+                    <div class="recommendation-list mb-4">
+                        <div class="flex items-center mb-4">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mr-2">
+                                <span class="text-white text-xs">🌱</span>
+                            </div>
+                            <h3 class="font-semibold text-white">Non-Chemical Management</h3>
+                        </div>
+                        <div class="space-y-3">
+                            ${result.recommendations.nonChemical.map((rec, index) => `
+                                <div class="recommendation-item">
+                                    <div class="recommendation-icon non-chemical">${index + 1}</div>
+                                    <span class="text-white/90">${rec}</span>
+                                </div>
                             `).join('')}
-                        </ul>
+                        </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-gray-800 mb-3">🧪 Chemical Management:</h3>
-                        <ul class="space-y-2">
-                            ${result.recommendations.chemical.map(rec => `
-                                <li class="flex items-start">
-                                    <span class="text-blue-500 mr-2">•</span>
-                                    <span class="text-gray-700">${rec}</span>
-                                </li>
+                    <div class="recommendation-list mb-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-2">
+                                <span class="text-white text-xs">🧪</span>
+                            </div>
+                            <h3 class="font-semibold text-white">Chemical Management</h3>
+                        </div>
+                        <div class="space-y-3">
+                            ${result.recommendations.chemical.map((rec, index) => `
+                                <div class="recommendation-item">
+                                    <div class="recommendation-icon chemical">${index + 1}</div>
+                                    <span class="text-white/90">${rec}</span>
+                                </div>
                             `).join('')}
-                        </ul>
+                        </div>
                     </div>
                     
-                    <div class="bg-yellow-50 p-4 rounded-lg">
-                        <p class="text-sm text-yellow-800">
-                            <strong>⚠️ Important:</strong> Always consult with a certified crop advisor or extension agent before applying any treatments. Follow all label instructions and local regulations.
-                        </p>
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-xl border border-yellow-200 mb-6">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center mr-3 mt-0.5">
+                                <span class="text-white text-sm">⚠️</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-yellow-800 mb-1">Important Notice</h4>
+                                <p class="text-sm text-yellow-700">
+                                    Always consult with a certified crop advisor or extension agent before applying any treatments. Follow all label instructions and local regulations.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Feedback Section -->
-                <div class="bg-gray-50 rounded-lg p-4 mt-4">
-                    <h3 class="font-semibold text-gray-800 mb-3">📝 Was this identification helpful?</h3>
-                    <div class="flex space-x-2">
-                        <button onclick="submitFeedback(true)" class="btn-secondary flex-1">👍 Yes</button>
-                        <button onclick="submitFeedback(false)" class="btn-secondary flex-1">👎 No</button>
+                <div class="glass-card p-4 mt-4">
+                    <div class="text-center mb-4">
+                        <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mb-2">
+                            <span class="text-white text-sm">📝</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Feedback</h3>
+                        <p class="text-gray-600 text-sm">Was this identification helpful?</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="submitFeedback(true)" class="btn-success flex-1">
+                            <span class="mr-2">👍</span>Yes, helpful
+                        </button>
+                        <button onclick="submitFeedback(false)" class="btn-danger flex-1">
+                            <span class="mr-2">👎</span>Not helpful
+                        </button>
                     </div>
                 </div>
             `;
