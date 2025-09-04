@@ -552,9 +552,8 @@
                     Field Location: ${currentField ? currentField.name : 'Unknown'}
                 `;
                 
-                // Note: In a real implementation, you would call the Gemini API here
-                // For this demo, we'll simulate the API response
-                const result = await simulateAIAnalysis(capturedPhoto, context);
+                // Call the backend API for real AI analysis
+                const result = await callBackendAnalysis(capturedPhoto, context);
                 
                 displayResults(result);
                 showScreen('results-screen');
@@ -565,31 +564,67 @@
             }
         }
         
-        async function simulateAIAnalysis(photo, context) {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            
-            // Simulate AI response (in real app, this would be from Gemini API)
-            return {
-                identification: {
-                    commonName: "Waterhemp",
-                    scientificName: "Amaranthus tuberculatus",
-                    confidence: 94
-                },
-                description: "Waterhemp is a highly problematic annual broadleaf weed that has developed resistance to multiple herbicide modes of action, including glyphosate (Roundup). It's characterized by its smooth, hairless stems and narrow, lance-shaped leaves. This aggressive weed can grow up to 8 feet tall and produces thousands of seeds, making it a serious threat to soybean yields.",
-                recommendations: {
-                    nonChemical: [
-                        "Implement crop rotation with corn to disrupt waterhemp life cycle",
-                        "Use cover crops like cereal rye to suppress early waterhemp emergence",
-                        "Practice shallow cultivation in early spring before planting"
-                    ],
-                    chemical: [
-                        "Apply pre-emergence herbicides with multiple modes of action (Group 2, 14, 15)",
-                        "Use post-emergence herbicides like Liberty (glufosinate) if crop is tolerant",
-                        "Consider tank-mixing different herbicide groups for resistance management"
-                    ]
+        async function callBackendAnalysis(photo, context) {
+            try {
+                // Get the current base URL (works for both local and deployed)
+                const baseUrl = window.location.origin;
+                
+                const response = await fetch(`${baseUrl}/api/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        imageData: photo,
+                        context: context
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Backend API Error:', errorData);
+                    
+                    // If backend provides a fallback, use it
+                    if (errorData.fallback) {
+                        return errorData.fallback;
+                    }
+                    
+                    throw new Error(`Analysis failed: ${errorData.error || 'Unknown error'}`);
                 }
-            };
+
+                const data = await response.json();
+                
+                if (!data.success || !data.result) {
+                    throw new Error('Invalid response from analysis service');
+                }
+
+                return data.result;
+
+            } catch (error) {
+                console.error('Analysis error:', error);
+                
+                // Provide a user-friendly fallback response
+                return {
+                    identification: {
+                        commonName: "Analysis Unavailable",
+                        scientificName: "Service temporarily unavailable",
+                        confidence: 0
+                    },
+                    description: "Unable to complete AI analysis at this time. This could be due to network connectivity issues or temporary service unavailability. Please check your internet connection and try again.",
+                    recommendations: {
+                        nonChemical: [
+                            "Take additional photos from different angles for manual identification",
+                            "Consult with local agricultural extension services",
+                            "Document the location and spread pattern of the issue"
+                        ],
+                        chemical: [
+                            "Contact a certified crop advisor for identification assistance",
+                            "Consider soil and plant tissue testing if nutrient deficiency is suspected",
+                            "Follow integrated pest management principles"
+                        ]
+                    }
+                };
+            }
         }
         
         function displayResults(result) {
@@ -692,32 +727,40 @@
             showScreen('error-screen');
         }
         
-        // Utility function to handle API calls (placeholder for real implementation)
-        async function callGeminiAPI(imageData, contextText) {
-            // This would be replaced with actual Gemini API call
-            const prompt = `You are an expert agronomist specializing in the U.S. Corn Belt. Analyze the provided image and context. Identify the primary weed, pest, or disease. Provide the common name, scientific name, a confidence score from 0-100%, a brief one-paragraph description of its characteristics and potential crop impact, and suggest three non-chemical and three chemical management strategies. Format the response as a JSON object.
-
-Context: ${contextText}`;
-            
-            // In real implementation:
-            // const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'x-goog-api-key': 'YOUR_API_KEY'
-            //     },
-            //     body: JSON.stringify({
-            //         contents: [{
-            //             parts: [
-            //                 { text: prompt },
-            //                 { inline_data: { mime_type: 'image/jpeg', data: imageData.split(',')[1] } }
-            //             ]
-            //         }]
-            //     })
-            // });
-            
-            throw new Error('API integration not implemented in demo');
+        // Health check function to verify backend connectivity
+        async function checkBackendHealth() {
+            try {
+                const baseUrl = window.location.origin;
+                const response = await fetch(`${baseUrl}/api/health`);
+                
+                if (response.ok) {
+                    const health = await response.json();
+                    console.log('Backend health:', health);
+                    return health;
+                }
+                return null;
+            } catch (error) {
+                console.warn('Backend health check failed:', error);
+                return null;
+            }
         }
+
+        // Initialize backend connection check on app load
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... existing initialization code ...
+            
+            // Check backend connectivity
+            checkBackendHealth().then(health => {
+                if (health) {
+                    console.log('✅ Backend connected successfully');
+                    if (!health.geminiConfigured) {
+                        console.warn('⚠️ Gemini API key not configured on backend');
+                    }
+                } else {
+                    console.warn('❌ Backend not accessible - running in offline mode');
+                }
+            });
+        });
     </script>
 </body>
 </html>
