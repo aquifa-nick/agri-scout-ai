@@ -674,7 +674,7 @@
             const base64Data = imageData.split(',')[1];
             
             const requestData = {
-                image: base64Data,
+                imageData: base64Data,
                 context: `Analyze this weed image. Crop: ${context.cropType}, Growth stage: ${context.growthStage}, Recent applications: ${context.recentApplications || 'None specified'}`
             };
 
