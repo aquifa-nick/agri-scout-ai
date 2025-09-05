@@ -708,12 +708,24 @@
                 return;
             }
 
-            const { identification, description, management } = result;
+            const { identification, description, invasiveness, management } = result;
             const confidence = identification.confidence || 0;
             
             let confidenceClass = 'confidence-low';
             if (confidence >= 80) confidenceClass = 'confidence-high';
             else if (confidence >= 60) confidenceClass = 'confidence-medium';
+
+            // Determine invasiveness color
+            let invasivenessClass = 'confidence-low';
+            if (invasiveness?.level) {
+                switch(invasiveness.level.toLowerCase()) {
+                    case 'low': invasivenessClass = 'confidence-high'; break;
+                    case 'moderate': invasivenessClass = 'confidence-medium'; break;
+                    case 'high': invasivenessClass = 'confidence-low'; break;
+                    case 'severe': invasivenessClass = 'confidence-low'; break;
+                    default: invasivenessClass = 'confidence-medium';
+                }
+            }
 
             container.innerHTML = `
                 <div class="result-card">
@@ -736,13 +748,28 @@
                         </div>
                     ` : ''}
                     
-                    ${management && management.nonChemical && management.nonChemical.length > 0 ? `
+                    ${invasiveness ? `
+                        <div class="info-card" style="margin: var(--space-3) 0;">
+                            <div class="info-icon">⚠️</div>
+                            <div class="info-content">
+                                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                                    <h4 class="text-base text-primary" style="margin: 0;">Invasiveness Level</h4>
+                                    <div class="confidence-badge ${invasivenessClass}" style="font-size: 12px;">
+                                        ${invasiveness.level}
+                                    </div>
+                                </div>
+                                <p class="text-sm text-secondary">${invasiveness.description}</p>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${management && management.organic && management.organic.length > 0 ? `
                         <div style="margin: var(--space-4) 0;">
-                            <h4 class="text-md text-primary" style="margin-bottom: var(--space-2);">Non-Chemical Management</h4>
+                            <h4 class="text-md text-primary" style="margin-bottom: var(--space-2);">🌱 Organic Management Options</h4>
                             <div class="recommendation-list">
-                                ${management.nonChemical.map((item, index) => `
+                                ${management.organic.map((item, index) => `
                                     <div class="recommendation-item">
-                                        <div class="recommendation-icon">${index + 1}</div>
+                                        <div class="recommendation-icon" style="background: var(--color-accent-secondary);">${index + 1}</div>
                                         <div style="flex: 1;">
                                             <p class="text-base" style="color: #333;">${item}</p>
                                         </div>
@@ -754,7 +781,7 @@
                     
                     ${management && management.chemical && management.chemical.length > 0 ? `
                         <div style="margin: var(--space-4) 0;">
-                            <h4 class="text-md text-primary" style="margin-bottom: var(--space-2);">Chemical Management</h4>
+                            <h4 class="text-md text-primary" style="margin-bottom: var(--space-2);">🧪 Chemical Management Options</h4>
                             <div class="recommendation-list">
                                 ${management.chemical.map((item, index) => `
                                     <div class="recommendation-item">

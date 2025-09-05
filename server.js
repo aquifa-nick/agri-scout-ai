@@ -75,11 +75,21 @@ Required JSON structure:
         "confidence": number (0-100)
     },
     "description": "string (one paragraph describing characteristics and crop impact)",
-    "recommendations": {
-        "nonChemical": ["string", "string", "string"],
+    "invasiveness": {
+        "level": "string (Low, Moderate, High, or Severe)",
+        "description": "string (brief explanation of invasive characteristics)"
+    },
+    "management": {
+        "organic": ["string", "string", "string"],
         "chemical": ["string", "string", "string"]
     }
 }
+
+For invasiveness level:
+- Low: Easy to control, limited spread
+- Moderate: Requires attention, moderate spread potential  
+- High: Aggressive spread, difficult to control
+- Severe: Extremely invasive, major threat to crops
 
 Context Information: ${context}
 
@@ -207,8 +217,12 @@ function getFallbackResponse() {
             confidence: 0
         },
         description: "Unable to complete AI analysis at this time. Please try again later or consult with a local agricultural extension office for identification assistance.",
-        recommendations: {
-            nonChemical: [
+        invasiveness: {
+            level: "Unknown",
+            description: "Invasiveness level cannot be determined without proper identification."
+        },
+        management: {
+            organic: [
                 "Document the issue with additional photos from different angles",
                 "Consult with local agricultural extension services",
                 "Monitor the affected area for changes or spread"
@@ -230,11 +244,14 @@ function isValidAnalysisResult(result) {
            typeof result.identification.scientificName === 'string' &&
            typeof result.identification.confidence === 'number' &&
            typeof result.description === 'string' &&
-           result.recommendations &&
-           Array.isArray(result.recommendations.nonChemical) &&
-           Array.isArray(result.recommendations.chemical) &&
-           result.recommendations.nonChemical.length >= 3 &&
-           result.recommendations.chemical.length >= 3;
+           result.invasiveness &&
+           typeof result.invasiveness.level === 'string' &&
+           typeof result.invasiveness.description === 'string' &&
+           result.management &&
+           Array.isArray(result.management.organic) &&
+           Array.isArray(result.management.chemical) &&
+           result.management.organic.length >= 2 &&
+           result.management.chemical.length >= 2;
 }
 
 // Serve the main application
