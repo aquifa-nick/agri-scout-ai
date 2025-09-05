@@ -695,7 +695,10 @@
         function displayResults(analysisData) {
             const container = document.getElementById('results-container');
             
-            if (!analysisData || !analysisData.identification) {
+            // Extract the result from the API response
+            const result = analysisData.result || analysisData;
+            
+            if (!result || !result.identification) {
                 container.innerHTML = `
                     <div class="result-card">
                         <h3 class="text-lg text-primary">Analysis Unavailable</h3>
@@ -705,7 +708,7 @@
                 return;
             }
 
-            const { identification, description, management } = analysisData;
+            const { identification, description, management } = result;
             const confidence = identification.confidence || 0;
             
             let confidenceClass = 'confidence-low';
