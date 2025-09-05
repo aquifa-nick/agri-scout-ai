@@ -670,11 +670,9 @@
                 throw new Error('Cannot connect to analysis service');
             }
 
-            // Convert base64 to blob for sending
-            const base64Data = imageData.split(',')[1];
-            
+            // Send the full data URL (including data:image/jpeg;base64, prefix)
             const requestData = {
-                imageData: base64Data,
+                imageData: imageData,
                 context: `Analyze this weed image. Crop: ${context.cropType}, Growth stage: ${context.growthStage}, Recent applications: ${context.recentApplications || 'None specified'}`
             };
 
