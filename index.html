@@ -65,6 +65,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             padding-bottom: 120px; /* Space for bottom navigation */
+            margin: 0;
         }
         
         /* Button System */
@@ -172,29 +173,44 @@
         .app-header {
             background: var(--color-bg-surface);
             border-bottom: 1px solid var(--color-border-subtle);
-            padding: var(--space-2) 0;
             backdrop-filter: blur(8px);
-            position: sticky;
-            top: 0;
+            position: relative;
             z-index: 100;
+            /* Mobile: half screen height */
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Desktop: reduce header height */
+        @media (min-width: 768px) {
+            .app-header {
+                height: 30vh;
+                min-height: 200px;
+            }
         }
         
         .header-content {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            width: 100%;
         }
         
-        .app-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--color-accent-primary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: var(--space-1);
+        .app-logo {
+            max-width: 280px;
+            width: 70%;
+            height: auto;
+            filter: brightness(1) contrast(1);
+        }
+        
+        /* Hide on mobile if too small */
+        @media (max-width: 480px) {
+            .app-logo {
+                max-width: 240px;
+                width: 80%;
+            }
         }
         
         /* Media Preview */
@@ -356,22 +372,14 @@
 <body>
     <!-- Header -->
     <header class="app-header">
-        <div class="container">
-            <div class="header-content">
-                <div>
-                    <div class="app-icon">
-                        <span>🌾</span>
-                    </div>
-                    <h1 class="text-xl text-primary">Agri-Scout AI</h1>
-                    <p class="text-sm text-secondary">Weed Identifier</p>
-                </div>
-            </div>
+        <div class="header-content">
+            <img src="logo.svg" alt="Weed AI" class="app-logo">
         </div>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        <div class="section" style="position: relative; min-height: 60vh;">
+        <div class="section" style="position: relative; min-height: 40vh; margin-top: var(--space-2);">
         
             <!-- Camera Screen -->
             <div id="camera-screen" class="screen">

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150">
+  <defs>
+    <style>
+      .logo-text {
+        fill: white;
+        font-family: 'Arial', sans-serif;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+      .main-text {
+        font-size: 48px;
+      }
+      .sub-text {
+        font-size: 18px;
+        opacity: 0.8;
+      }
+      .leaf {
+        fill: white;
+        opacity: 0.6;
+      }
+    </style>
+  </defs>
+  
+  <!-- Main text -->
+  <text x="20" y="60" class="logo-text main-text">weed</text>
+  <text x="180" y="60" class="logo-text main-text">AI</text>
+  
+  <!-- Subtitle -->
+  <text x="20" y="85" class="logo-text sub-text">plant identification</text>
+  
+  <!-- Decorative leaf elements -->
+  <path d="M320 40 Q330 30, 340 40 Q350 50, 340 60 Q330 70, 320 60 Q310 50, 320 40" class="leaf"/>
+  <path d="M350 45 Q360 35, 370 45 Q380 55, 370 65 Q360 75, 350 65 Q340 55, 350 45" class="leaf"/>
+  <path d="M335 70 Q345 60, 355 70 Q365 80, 355 90 Q345 100, 335 90 Q325 80, 335 70" class="leaf"/>
+</svg>
